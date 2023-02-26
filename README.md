@@ -9,7 +9,8 @@ webhookURLを作成します
 【AWS】<br>
 Lambda関数：discord_cost_check_lambda.py<br>
 　→web_hookのurlは置き換えてください。<br>
-EventBridgeルール：7日間ごとにcronを実行<br>
+EventBridgeルール：discord_cost_check_event.json
+　→7日間ごとに実行します。Targetは置き換えてください。<br>
 
 ## 出力イメージ
 ![出力イメージ](image2.jpg)
