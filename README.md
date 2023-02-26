@@ -1,0 +1,2 @@
+# discord_cost_check
+AWSの月間コスト算出結果をDiscordに通知します
