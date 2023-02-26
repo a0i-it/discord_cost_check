@@ -1,0 +1,19 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "CloudFormation template for EventBridge rule '7days_cost_check'",
+  "Resources": {
+    "EventRule0": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventBusName": "default",
+        "Name": "7days_cost_check",
+        "ScheduleExpression": "cron(0 1 */7 * ? *)",
+        "State": "ENABLED",
+        "Targets": [{
+          "Id": "XXXXXXXXXXXX",
+          "Arn": "arn:aws:lambda:XXXXXXXXXXXX:XXXXXXXXXXXX:function:XXXXXXXXXXXX"
+        }]
+      }
+    }
+  }
+}
