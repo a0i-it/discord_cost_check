@@ -9,6 +9,7 @@ webhookURLを作成します
 【AWS】<br>
 Lambda関数：discord_cost_check_lambda.py<br>
 　→web_hookのurlは置き換えてください。<br>
+　→為替APIは[クジラ外国為替確認API](https://api.aoikujira.com/index.php?fx)を利用させてもらいました。<br>
 EventBridgeルール：discord_cost_check_event.json<br>
 　→7日間ごとに実行します。Targetは置き換えてください。<br>
 
