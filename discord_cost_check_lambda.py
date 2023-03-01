@@ -58,28 +58,37 @@ def parse_event(event):
     client = boto3.client('ce')
     today = datetime.today()
 
-    response = client.get_cost_and_usage(
-        TimePeriod={
-            'Start': datetime.strftime(today.replace(day=1), '%Y-%m-%d'),
-            'End': datetime.strftime(today, '%Y-%m-%d')
-        },
-        Granularity='MONTHLY',
-        Metrics=['BlendedCost'],
-    )
+    if (datetime.strftime(today.replace(day=1), '%Y-%m-%d')==datetime.strftime(today, '%Y-%m-%d')):
+        message = f"""
+        :moneybag: **AWSのコスト通知です** :moneybag:\r
+        【算出結果】
+        月初日のため処理をスキップしました。
+        """
+        logger.info('Success Creating Discord Messages!')
+        return message
+    else:
+        response = client.get_cost_and_usage(
+            TimePeriod={
+                'Start': datetime.strftime(today.replace(day=1), '%Y-%m-%d'),
+                'End': datetime.strftime(today, '%Y-%m-%d')
+            },
+            Granularity='MONTHLY',
+            Metrics=['BlendedCost'],
+        )
     
-    CostUSD = trans_usd(response['ResultsByTime'][0]['Total']['BlendedCost']['Amount'])
-    CostYEN = trans_yen(response['ResultsByTime'][0]['Total']['BlendedCost']['Amount'])
+        CostUSD = trans_usd(response['ResultsByTime'][0]['Total']['BlendedCost']['Amount'])
+        CostYEN = trans_yen(response['ResultsByTime'][0]['Total']['BlendedCost']['Amount'])
 
-    message = f"""
-    :moneybag: **AWSのコスト通知です** :moneybag:\r
-    【算出結果】
-    ▼算出開始日 : {response['ResultsByTime'][0]['TimePeriod']['Start']}
-    ▼算出終了日 : {response['ResultsByTime'][0]['TimePeriod']['End']}
+        message = f"""
+        :moneybag: **AWSのコスト通知です** :moneybag:\r
+        【算出結果】
+        ▼算出開始日 : {response['ResultsByTime'][0]['TimePeriod']['Start']}
+        ▼算出終了日 : {response['ResultsByTime'][0]['TimePeriod']['End']}
     
-    ▼トータル額 : 約{CostUSD} USD
-    ▼トータル額 : 約{CostYEN} 円
+        ▼トータル額 : 約{CostUSD} USD
+        ▼トータル額 : 約{CostYEN} 円
 
-    """
-    logger.info('Success Creating Discord Messages!')
+        """
+        logger.info('Success Creating Discord Messages!')
  
-    return message
+        return message
